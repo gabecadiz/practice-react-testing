@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, cleanup } from 'react-testing-library';
 import { MemoryRouter } from 'react-router-dom';
-import Movie from './Movie';
+import Movie, { POSTER_PATH } from './Movie';
 
 afterEach(() => {
   cleanup();
@@ -21,10 +21,15 @@ const movie = {
   poster_path: 'asgsda.jpg'
 };
 test('<Movie /> with movie', () => {
-  render(
+  const { debug, getByTestId } = render(
     <MemoryRouter>
       <Movie movie={movie} />
     </MemoryRouter>
   );
   expect(console.error).not.toHaveBeenCalled();
+  expect(getByTestId('movie-link').getAttribute('href')).toBe('/' + movie.id);
+  expect(getByTestId('movie-img').src).toBe(
+    `${POSTER_PATH}${movie.poster_path}`
+  );
+  debug();
 });
